@@ -5,6 +5,7 @@ php:
   - 7.1
 
 install:
+  - pecl install igbinary
   - composer install --no-interaction --prefer-source --dev
 
 script:
