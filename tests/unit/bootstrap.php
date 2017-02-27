@@ -13,6 +13,8 @@ $mockFunctions = [
     ["sndsgd\\serializer", "json_decode"],
     ["sndsgd\\serializer", "json_encode"],
     ["sndsgd\\serializer", "json_last_error"],
+    ["sndsgd\\serializer", "extension_loaded"],
+    ["sndsgd\\serializer", "igbinary_unserialize"],
 ];
 
 foreach ($mockFunctions as list($namespace, $name)) {
