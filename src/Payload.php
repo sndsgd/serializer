@@ -63,7 +63,7 @@ class Payload
         $optionsLength = strlen($options);
         if ($optionsLength > self::OPTIONS_LENGTH) {
             throw new \InvalidArgumentException(
-                "invalid options; expecting a string exactly ".
+                "invalid options; expecting a string no longer than ".
                 self::OPTIONS_LENGTH." characters long"
             );
         }
@@ -83,24 +83,46 @@ class Payload
     }
 
     /**
-     * Split serialized data into the identifier, options, and payload
+     * Split a serialized payload into the identifier, options, and payload
      *
-     * @param string $data The serialized data
-     * @return array
+     * @param string &$payload The serialized payload
+     * @return array<string>
      */
-    public static function split(string $data): array
+    public static function split(string &$payload): array
     {
-        $length = strlen($data);
-        if ($length < self::MIN_LENGTH) {
-            throw new \InvalidArgumentException(
+        self::verifyPayloadLength($payload);
+        return [
+            substr($payload, 0, self::IDENTIFIER_LENGTH),
+            substr($payload, self::OPTIONS_START_INDEX, self::OPTIONS_LENGTH),
+            substr($payload, self::PAYLOAD_START_INDEX),
+        ];
+    }
+
+    /**
+     * Retrieve the serializer identifier from a serialized payload
+     *
+     * @param string &$payload The serialized payload
+     * @return string
+     */
+    public static function getIdentifier(string &$payload): string
+    {
+        self::verifyPayloadLength($payload);
+        return substr($payload, 0, self::IDENTIFIER_LENGTH);
+    }
+
+    /**
+     * Verify a serialized payload meets the minimum length requirement
+     *
+     * @param string &$payload The serialized payload to verify
+     * @return void
+     * @throws \UnexpectedValueException If the minimum length is not met
+     */
+    private static function verifyPayloadLength(string &$payload)
+    {
+        if (strlen($payload) < self::MIN_LENGTH) {
+            throw new \UnexpectedValueException(
                 "provided payload did not meet minimum length requirement"
             );
         }
-
-        return [
-            substr($data, 0, self::IDENTIFIER_LENGTH),
-            substr($data, self::OPTIONS_START_INDEX, self::OPTIONS_LENGTH),
-            substr($data, self::PAYLOAD_START_INDEX),
-        ];
     }
 }

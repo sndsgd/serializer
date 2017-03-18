@@ -22,7 +22,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideJoinException
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testJoinException($identifier, $options, $data)
     {
@@ -68,7 +68,7 @@ class PayloadTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideSplitException
-     * @expectedException InvalidArgumentException
+     * @expectedException \UnexpectedValueException
      */
     public function testSplitException($test)
     {
@@ -79,6 +79,22 @@ class PayloadTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [str_repeat("a", Payload::MIN_LENGTH - 1)],
+        ];
+    }
+
+    /**
+     * @dataProvider provideGetIdentifier
+     */
+    public function testGetIdentifier(string $payload, string $expect)
+    {
+        $this->assertSame($expect, Payload::getIdentifier($payload));
+    }
+
+    public function provideGetIdentifier(): array
+    {
+        return [
+            ["aa0000000", "aa"],
+            ["12_______", "12"],
         ];
     }
 }
