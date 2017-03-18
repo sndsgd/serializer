@@ -19,6 +19,7 @@
         "sndsgd/util": ">=1.1"
     },
     "require-dev": {
+        "phpunit/phpunit": "~5",
         "php-mock/php-mock-phpunit": "^1.1",
         "satooshi/php-coveralls": "~1.0"
     },
